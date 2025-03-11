@@ -1,0 +1,734 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Page Not Found</title>
+    <style>
+        /* Common styles */
+        body, html {
+            margin: 0;
+            padding: 0;
+            height: 100%;
+            font-family: 'Arial', sans-serif;
+        }
+        
+        /* 404 Page */
+        .error-page {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            background-color: #f5f5f5;
+            text-align: center;
+        }
+        
+        .error-code {
+            font-size: 120px;
+            color: #e74c3c;
+            margin: 0;
+            font-weight: bold;
+        }
+        
+        .error-message {
+            font-size: 24px;
+            color: #333;
+            margin: 20px 0;
+        }
+        
+        .refresh-button {
+            padding: 12px 24px;
+            background-color: #e84393;
+            color: white;
+            border: none;
+            border-radius: 25px;
+            font-size: 18px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+        
+        .refresh-button:hover {
+            background-color: #fd79a8;
+            transform: scale(1.05);
+        }
+        
+        /* Birthday Page */
+        .birthday-page {
+            display: none;
+            height: 100vh;
+            overflow: hidden;
+            background-color: #ffedf2;
+            position: relative;
+        }
+        
+        .birthday-content {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100%;
+            z-index: 10;
+            position: relative;
+        }
+        
+        .birthday-title {
+            font-size: 52px;
+            color: #e84393;
+            text-align: center;
+            margin-bottom: 20px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
+            animation: pulse 2s infinite;
+        }
+        
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+        
+        .gift-button {
+            padding: 15px 30px;
+            background-color: #e84393;
+            color: white;
+            border: none;
+            border-radius: 25px;
+            font-size: 18px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 30px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+        
+        .gift-button:hover {
+            background-color: #fd79a8;
+            transform: scale(1.05);
+        }
+        
+        /* Hearts */
+        .heart {
+            position: absolute;
+            width: 25px;
+            height: 25px;
+            background-color: #e84393;
+            transform: rotate(45deg);
+            animation: heartFall linear;
+            z-index: 1;
+        }
+        
+        .heart::before,
+        .heart::after {
+            content: '';
+            position: absolute;
+            width: 25px;
+            height: 25px;
+            background-color: #e84393;
+            border-radius: 50%;
+        }
+        
+        .heart::before {
+            top: -12.5px;
+            left: 0;
+        }
+        
+        .heart::after {
+            top: 0;
+            left: -12.5px;
+        }
+        
+        @keyframes heartFall {
+            from {
+                transform: translateY(-10vh) rotate(45deg) scale(0.8);
+                opacity: 1;
+            }
+            to {
+                transform: translateY(100vh) rotate(45deg) scale(0.8);
+                opacity: 0;
+            }
+        }
+        
+        /* Common overlay styles */
+        .overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(255, 255, 255, 0.9);
+            z-index: 100;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .container {
+            text-align: center;
+        }
+        
+        .emoji {
+            font-size: 120px;
+            animation: emojiAnimation 2s infinite;
+        }
+        
+        @keyframes emojiAnimation {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.2); }
+            100% { transform: scale(1); }
+        }
+        
+        .button {
+            padding: 10px 20px;
+            background-color: #e84393;
+            color: white;
+            border: none;
+            border-radius: 25px;
+            font-size: 16px;
+            cursor: pointer;
+            margin-top: 20px;
+        }
+        
+        /* Specific overlay animations */
+        @keyframes winkAnimation {
+            0% { transform: scale(1); }
+            25% { transform: scale(1.1) rotate(-5deg); }
+            50% { transform: scale(1.2) rotate(5deg); }
+            75% { transform: scale(1.1) rotate(-5deg); }
+            100% { transform: scale(1); }
+        }
+        
+        .kiss-emoji {
+            animation: emojiAnimation 2s infinite;
+        }
+        
+        .hug-emoji {
+            animation: emojiAnimation 2s infinite;
+        }
+        
+        .wink-emoji {
+            animation: winkAnimation 3s infinite;
+        }
+        
+        /* Camera Overlay styles */
+        .camera-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.9);
+            z-index: 200;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        #cameraFeed {
+            max-width: 90%;
+            max-height: 70vh;
+            border: 3px solid #e84393;
+            border-radius: 10px;
+            background-color: #222;
+        }
+        
+        .camera-title {
+            color: white;
+            font-size: 24px;
+            margin-bottom: 20px;
+        }
+        
+        .camera-buttons {
+            display: flex;
+            gap: 10px;
+            margin-top: 20px;
+        }
+        
+        /* Prince button */
+        .prince-button {
+            padding: 15px 30px;
+            background-color: #2980b9;
+            color: white;
+            border: none;
+            border-radius: 25px;
+            font-size: 18px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 20px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+        
+        .prince-button:hover {
+            background-color: #3498db;
+            transform: scale(1.05);
+        }
+        
+        /* Password page styles */
+        .password-page {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            background-color: #f5f5f5;
+            text-align: center;
+        }
+        
+        .password-question {
+            margin-bottom: 30px;
+        }
+        
+        .question-text {
+            font-size: 24px;
+            color: #333;
+            margin-bottom: 15px;
+        }
+        
+        .emoji-options {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin-top: 10px;
+        }
+        
+        .emoji-option {
+            font-size: 40px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        
+        .emoji-option:hover {
+            transform: scale(1.2);
+        }
+        
+        .success-message {
+            color: #e84393;
+            font-size: 32px;
+            font-weight: bold;
+            margin: 20px 0;
+            animation: pulse 2s infinite;
+        }
+        @keyframes wrongAnswer {
+            0% { transform: scale(0); opacity: 0; }
+            50% { transform: scale(1.5); opacity: 1; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+        
+        @keyframes correctAnswer {
+            0% { opacity: 0; }
+            100% { opacity: 1; }
+        }
+        
+        .wrong-emoji {
+            position: absolute;
+            font-size: 40px;
+            animation: wrongAnswer 0.5s forwards;
+            z-index: 100;
+        }
+        
+        .correct-emoji {
+            position: absolute;
+            font-size: 40px;
+            animation: correctAnswer 0.5s forwards;
+            z-index: 100;
+        }
+        
+    </style>
+</head>
+<body>
+    <!-- Password Page 1 - Hand gestures -->
+    <div class="password-page" id="passwordPage1">
+        <h2>Question 1</h2>
+        <div class="password-question">
+            <p class="question-text">Choose the correct hand gesture:</p>
+            <div class="emoji-options">
+                <span class="emoji-option" data-value="incorrect">☝️</span>
+                <span class="emoji-option" data-value="incorrect">👇</span>
+                <span class="emoji-option" data-value="incorrect">🫰</span>
+                <span class="emoji-option" data-value="correct">🤙</span>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Password Page 2 - Fruits -->
+    <div class="password-page" id="passwordPage2" style="display: none;">
+        <h2>Question 2</h2>
+        <div class="password-question">
+            <p class="question-text">Choose the correct fruit:</p>
+            <div class="emoji-options">
+                <span class="emoji-option" data-value="correct">🍊</span>
+                <span class="emoji-option" data-value="incorrect">🥑</span>
+                <span class="emoji-option" data-value="incorrect">🍉</span>
+                <span class="emoji-option" data-value="incorrect">🥭</span>
+                <span class="emoji-option" data-value="incorrect">🫐</span>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Password Page 3 - Emotions -->
+    <div class="password-page" id="passwordPage3" style="display: none;">
+        <h2>Question 3</h2>
+        <div class="password-question">
+            <p class="question-text">Choose the correct emotion:</p>
+            <div class="emoji-options">
+                <span class="emoji-option" data-value="incorrect">😶‍🌫️</span>
+                <span class="emoji-option" data-value="incorrect">🥰</span>
+                <span class="emoji-option" data-value="incorrect">😌</span>
+                <span class="emoji-option" data-value="correct">😍</span>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Success Page -->
+    <div class="password-page" id="successPage" style="display: none;">
+        <div class="success-message">Oii Bommayiii!</div>
+        <button class="refresh-button" id="enterButton">Enter Birthday Space</button>
+    </div>
+    
+    <!-- 404 Error Page -->
+    <div class="error-page" id="errorPage" style="display: none;">
+        <h1 class="error-code">404</h1>
+        <p class="error-message">Oops! Page not found...</p>
+        <button class="refresh-button" id="refreshButton">Only the Birthday Girl can refresh</button>
+    </div>
+    
+    <!-- Birthday Page -->
+    <div class="birthday-page" id="birthdayPage" style="display: none;">
+        <div class="birthday-content">
+            <h1 class="birthday-title">Happy Birthday Thangoo!</h1>
+            <p style="font-size: 24px; color: #333;">I want to show you something special...</p>
+            <button class="gift-button" id="giftButton">Open Your Gift</button>
+        </div>
+    </div>
+    
+    <!-- Kiss Overlay -->
+    <div class="overlay" id="kissOverlay">
+        <div class="container">
+            <div class="emoji kiss-emoji">😘</div>
+            <p style="font-size: 24px; color: #e84393; margin-top: 20px;">A birthday kiss just for you!</p>
+            <button class="button" id="closeKiss">Close</button>
+        </div>
+    </div>
+    
+    <!-- Pothuma Overlay -->
+    <div class="overlay" id="pothumaOverlay">
+        <div class="container">
+            <div style="font-size: 50px; color: #e84393; margin-bottom: 20px; font-weight: bold;">Pothuma?</div>
+            <button class="button" id="hugButton">No, I want a hug too!</button>
+        </div>
+    </div>
+    
+    <!-- Hug Overlay -->
+    <div class="overlay" id="hugOverlay">
+        <div class="container">
+            <div class="emoji hug-emoji">🤗</div>
+            <p style="font-size: 24px; color: #e84393; margin-top: 20px;">A big birthday hug for you!</p>
+            <button class="button" id="closeHug">Close</button>
+        </div>
+    </div>
+    
+    <!-- Wink Overlay -->
+    <div class="overlay" id="winkOverlay">
+        <div class="container">
+            <div class="emoji wink-emoji">😉</div>
+            <p style="font-size: 24px; color: #e84393; margin-top: 20px;">You're special! Have the best birthday ever!</p>
+            <button class="button" id="closeWink">Back to celebration</button>
+            <button class="prince-button" id="princeButton">Do you want to see my prince?</button>
+        </div>
+    </div>
+    
+    <!-- Camera Overlay -->
+    <div class="camera-overlay" id="cameraOverlay">
+        <p class="camera-title">Here's your prince!</p>
+        <video id="cameraFeed" autoplay playsinline></video>
+        <div class="camera-buttons">
+            <button class="button" id="closeCamera">Back to celebration</button>
+        </div>
+    </div>
+    
+    <script>
+        // Direct references to elements we'll use often
+        const passwordPage1 = document.getElementById('passwordPage1');
+        const passwordPage2 = document.getElementById('passwordPage2');
+        const passwordPage3 = document.getElementById('passwordPage3');
+        const successPage = document.getElementById('successPage');
+        const errorPage = document.getElementById('errorPage');
+        const birthdayPage = document.getElementById('birthdayPage');
+        const kissOverlay = document.getElementById('kissOverlay');
+        const pothumaOverlay = document.getElementById('pothumaOverlay');
+        const hugOverlay = document.getElementById('hugOverlay');
+        const winkOverlay = document.getElementById('winkOverlay');
+        const cameraOverlay = document.getElementById('cameraOverlay');
+        const cameraFeed = document.getElementById('cameraFeed');
+        
+        // Add click event listeners to emoji options in password pages
+        document.querySelectorAll('.emoji-option').forEach(option => {
+            option.addEventListener('click', function() {
+                const isCorrect = this.getAttribute('data-value') === 'correct';
+                const parentPage = this.closest('.password-page');
+                
+                if (isCorrect) {
+                    // Go to next question
+                    if (parentPage.id === 'passwordPage1') {
+                        passwordPage1.style.display = 'none';
+                        passwordPage2.style.display = 'flex';
+                    } else if (parentPage.id === 'passwordPage2') {
+                        passwordPage2.style.display = 'none';
+                        passwordPage3.style.display = 'flex';
+                    } else if (parentPage.id === 'passwordPage3') {
+                        passwordPage3.style.display = 'none';
+                        successPage.style.display = 'flex';
+                    }
+                } else {
+                    // Shake the option to indicate incorrect
+                    this.style.animation = 'none';
+                    this.offsetHeight; // Trigger reflow
+                    this.style.animation = 'shake 0.5s';
+                }
+            });
+        });
+        
+        // Add shake animation for incorrect answers
+        const style = document.createElement('style');
+        style.innerHTML = `
+            @keyframes shake {
+                0%, 100% { transform: translateX(0); }
+                10%, 30%, 50%, 70%, 90% { transform: translateX(-5px); }
+                20%, 40%, 60%, 80% { transform: translateX(5px); }
+            }
+        `;
+        document.head.appendChild(style);
+        
+        // Enter button on success page
+        document.getElementById('enterButton').addEventListener('click', function() {
+            successPage.style.display = 'none';
+            errorPage.style.display = 'flex';
+        });
+        
+        // Set up the refresh button to show birthday page directly (no reload needed)
+        document.getElementById('refreshButton').addEventListener('click', function() {
+            // Hide error page and show birthday page
+            errorPage.style.display = 'none';
+            birthdayPage.style.display = 'block';
+            
+            // Start the hearts animation
+            createHearts();
+        });
+        
+        // Gift button click event
+        document.getElementById('giftButton').addEventListener('click', function() {
+            kissOverlay.style.display = 'flex';
+        });
+        
+        // Close kiss overlay and show pothuma
+        document.getElementById('closeKiss').addEventListener('click', function() {
+            kissOverlay.style.display = 'none';
+            pothumaOverlay.style.display = 'flex';
+        });
+        
+        // Hug button click event
+        document.getElementById('hugButton').addEventListener('click', function() {
+            pothumaOverlay.style.display = 'none';
+            hugOverlay.style.display = 'flex';
+        });
+        
+        // Close hug overlay and show wink
+        document.getElementById('closeHug').addEventListener('click', function() {
+            hugOverlay.style.display = 'none';
+            winkOverlay.style.display = 'flex';
+        });
+        
+        // Close wink overlay and return to birthday page
+        document.getElementById('closeWink').addEventListener('click', function() {
+            winkOverlay.style.display = 'none';
+        });
+        
+        // Create falling hearts
+        function createHearts() {
+            const totalHearts = 50;
+            
+            for(let i = 0; i < totalHearts; i++) {
+                setTimeout(() => {
+                    const heart = document.createElement('div');
+                    heart.classList.add('heart');
+                    
+                    // Random position on the x-axis
+                    const startPositionX = Math.random() * window.innerWidth;
+                    heart.style.left = startPositionX + 'px';
+                    
+                    // Random fall duration between 4 and 8 seconds
+                    const fallDuration = 4 + Math.random() * 4;
+                    heart.style.animationDuration = fallDuration + 's';
+                    
+                    // Random size between 10px and 25px
+                    const size = 10 + Math.random() * 15;
+                    heart.style.width = size + 'px';
+                    heart.style.height = size + 'px';
+                    
+                    // Random opacity between 0.5 and 1
+                    heart.style.opacity = 0.5 + Math.random() * 0.5;
+                    
+                    birthdayPage.appendChild(heart);
+                    
+                    // Remove the heart after animation completes
+                    setTimeout(() => {
+                        heart.remove();
+                    }, fallDuration * 1000);
+                    
+                }, i * 200); // Stagger the creation of hearts
+            }
+            
+            // Continue creating hearts
+            setTimeout(createHearts, totalHearts * 200);
+        }
+        
+        // Camera handling functions
+        let stream = null;
+        
+        // Prince button click event - shows camera
+        document.getElementById('princeButton').addEventListener('click', function() {
+            winkOverlay.style.display = 'none';
+            cameraOverlay.style.display = 'flex';
+            startCamera();
+        });
+        
+        // Close camera overlay
+        document.getElementById('closeCamera').addEventListener('click', function() {
+            stopCamera();
+            cameraOverlay.style.display = 'none';
+        });
+        
+        // Start camera function
+        function startCamera() {
+            // Check if the browser supports getUserMedia
+            if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
+                navigator.mediaDevices.getUserMedia({ video: true })
+                    .then(function(mediaStream) {
+                        stream = mediaStream;
+                        cameraFeed.srcObject = mediaStream;
+                        cameraFeed.onloadedmetadata = function(e) {
+                            cameraFeed.play();
+                        };
+                    })
+                    .catch(function(err) {
+                        console.log("Camera access error: " + err.message);
+                        alert("Could not access the camera. Please allow camera access and try again.");
+                    });
+            } else {
+                alert("Your browser doesn't support camera access. Please try a different browser.");
+            }
+        }
+        
+        // Stop camera function
+        function stopCamera() {
+            if (stream) {
+                stream.getTracks().forEach(function(track) {
+                    track.stop();
+                });
+                cameraFeed.srcObject = null;
+                stream = null;
+            }
+        }
+
+
+
+                // Keep existing script elements
+        
+        // Modified click event for emoji options in password pages
+        const newStyle = document.createElement('style');
+newStyle.innerHTML = `
+    @keyframes fullScreenKiss {
+        0% {
+            transform: translate(-50%, -50%) scale(0.1);
+            opacity: 0;
+        }
+        40% {
+            transform: translate(-50%, -50%) scale(1.5);
+            opacity: 1;
+        }
+        80% {
+            transform: translate(-50%, -50%) scale(2.0);
+            opacity: 0.7;
+        }
+        100% {
+            transform: translate(-50%, -50%) scale(2.5);
+            opacity: 0;
+        }
+    }
+    
+    .full-screen-kiss {
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        font-size: 100px;
+        z-index: 1000;
+        transform: translate(-50%, -50%) scale(0.1);
+        opacity: 0;
+        animation: fullScreenKiss 1.5s forwards;
+        pointer-events: none;
+    }
+`;
+document.head.appendChild(newStyle);
+
+// Modified click event for emoji options in password pages
+document.querySelectorAll('.emoji-option').forEach(option => {
+    option.addEventListener('click', function(event) {
+        const isCorrect = this.getAttribute('data-value') === 'correct';
+        const parentPage = this.closest('.password-page');
+        
+        if (isCorrect) {
+            // Create a single full-screen kiss emoji
+            const kiss = document.createElement('div');
+            kiss.textContent = '💋';
+            kiss.classList.add('full-screen-kiss');
+            document.body.appendChild(kiss);
+            
+            // Remove the emoji after animation completes
+            setTimeout(() => {
+                kiss.remove();
+            }, 1500);
+            
+            // Wait until animation completes before going to next question
+            setTimeout(() => {
+                // Go to next question
+                if (parentPage.id === 'passwordPage1') {
+                    passwordPage1.style.display = 'none';
+                    passwordPage2.style.display = 'flex';
+                } else if (parentPage.id === 'passwordPage2') {
+                    passwordPage2.style.display = 'none';
+                    passwordPage3.style.display = 'flex';
+                } else if (parentPage.id === 'passwordPage3') {
+                    passwordPage3.style.display = 'none';
+                    successPage.style.display = 'flex';
+                }
+            }, 1600);
+        } else {
+            // Create facepalm emoji when wrong
+            const facepalm = document.createElement('div');
+            facepalm.textContent = '🤦🏻‍♂';
+            facepalm.classList.add('wrong-emoji');
+            
+            // Position the emoji near the clicked option
+            const rect = this.getBoundingClientRect();
+            facepalm.style.left = (rect.left + rect.width/2) + 'px';
+            facepalm.style.top = (rect.top - 40) + 'px';
+            
+            document.body.appendChild(facepalm);
+            
+            // Remove the emoji after animation
+            setTimeout(() => {
+                facepalm.remove();
+            }, 1500);
+            
+            // Shake the option to indicate incorrect
+            this.style.animation = 'none';
+            this.offsetHeight; // Trigger reflow
+            this.style.animation = 'shake 0.5s';
+        }
+    });
+});
+
+        
+    </script>
+</body>
+</html>
